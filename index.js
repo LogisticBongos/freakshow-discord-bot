@@ -11,7 +11,7 @@ const client = new Client({
 });
 
 const TARGET_ROLE = process.env.TARGET_ROLE;
-const TEST_COMMAND = '!ping'; // Command to test bot responsiveness
+const MSGTEST_COMMAND = '!freakshow'; // Command to test bot responsiveness
 const LOG_CHANNEL_NAME = 'bot-logs'; // Channel where bans are logged
 
 // Utility function to ban a member safely
@@ -65,7 +65,7 @@ client.on('guildMemberUpdate', async (oldMember, newMember) => {
 // Simple chat command to test bot responsiveness
 client.on('messageCreate', async (message) => {
     if (message.author.bot) return;
-    if (message.content === TEST_COMMAND) {
+    if (message.content === MSGTEST_COMMAND) {
         message.reply('freak me up callum');
     }
 });
