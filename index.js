@@ -62,10 +62,14 @@ client.on('guildMemberUpdate', async (oldMember, newMember) => {
     }
 });
 
-// Simple chat command to test bot responsiveness
+// Simple chat commands handler
 client.on('messageCreate', async (message) => {
-    if (message.author.bot) return;
-    if (message.content === MSGTEST_COMMAND) {
+    if (message.author.bot) return; // Ignore other bots
+
+    const content = message.content.trim().toLowerCase(); // Trim spaces and lowercase
+
+    // Test command
+    if (content === MSGTEST_COMMAND.toLowerCase()) {
         message.reply('freak me up callum');
     }
 });
