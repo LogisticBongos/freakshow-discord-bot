@@ -12,17 +12,19 @@ const client = new Client({
 
 const TARGET_ROLE = process.env.TARGET_ROLE;
 const TEST_COMMAND = '!ping'; // Command to test bot responsiveness
-const LOG_CHANNEL_NAME = 'bot-logs'; // Optional: create this channel for logging
+const LOG_CHANNEL_NAME = 'bot-logs'; // Channel where bans are logged
 
 // Utility function to ban a member safely
-async function banMember(member, reason = 'Selected underage role') {
+async function banMember(member) {
     if (member.permissions.has(PermissionsBitField.Flags.Administrator)) return;
+
+    const reason = 'Under 15 role';
 
     try {
         await member.ban({ reason });
         console.log(`BANNED: ${member.user.tag} | Reason: ${reason}`);
 
-        // Optional: log to Discord channel
+        // Log to Discord channel
         const logChannel = member.guild.channels.cache.find(ch => ch.name === LOG_CHANNEL_NAME);
         if (logChannel && logChannel.isTextBased()) {
             logChannel.send(`BANNED: ${member.user.tag} | Reason: ${reason}`);
@@ -38,7 +40,7 @@ async function banExistingMembers() {
         await guild.members.fetch(); // Ensure all members are cached
         for (const member of guild.members.cache.values()) {
             if (member.roles.cache.has(TARGET_ROLE)) {
-                await banMember(member, 'Selected underage role (startup check)');
+                await banMember(member);
             }
         }
     }
@@ -56,13 +58,13 @@ client.on('guildMemberUpdate', async (oldMember, newMember) => {
     const hasRole = newMember.roles.cache.has(TARGET_ROLE);
 
     if (!hadRole && hasRole) {
-        await banMember(newMember, 'Selected underage role (role added)');
+        await banMember(newMember);
     }
 });
 
 // Simple chat command to test bot responsiveness
 client.on('messageCreate', async (message) => {
-    if (message.author.bot) return; // Ignore other bots
+    if (message.author.bot) return;
     if (message.content === TEST_COMMAND) {
         message.reply('Pong! I am online and responsive.');
     }
