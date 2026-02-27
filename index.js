@@ -66,7 +66,7 @@ client.on('guildMemberUpdate', async (oldMember, newMember) => {
 client.on('messageCreate', async (message) => {
     if (message.author.bot) return;
     if (message.content === TEST_COMMAND) {
-        message.reply('Pong! I am online and responsive.');
+        message.reply('freak me up callum');
     }
 });
 
